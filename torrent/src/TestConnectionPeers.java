@@ -26,19 +26,19 @@ public class TestConnectionPeers {
 		System.out.println(getPos(buffer, 16, 4));
 		System.out.println(getPos(buffer, 16, 4));
 		
-//		for (int i = 20; i < size; i += 6) { j
-//			System.out.println(getIp(buffer, i));
-//			System.out.println(getPort(buffer, i + 4));
-//		}
-		BencodingInputStream input = new BencodingInputStream(
-				new FileInputStream("data1"));
-		TreeMap tree = (TreeMap) input.readMap();		
-		System.out.println(tree.keySet());
-		TreeMap a = (TreeMap) tree.get("a");
-		System.out.println(a.keySet());
-		System.out.println(a.get("id").toString());
-		
-		System.out.println(tree.get("q"));
+		for (int i = 20; i < size; i += 6) { 
+			System.out.println(getIp(buffer, i));
+			System.out.println(getPort(buffer, i + 4));
+		}
+//		BencodingInputStream input = new BencodingInputStream(
+//				new FileInputStream("data1"));
+//		TreeMap tree = (TreeMap) input.readMap();		
+//		System.out.println(tree.keySet());
+//		TreeMap a = (TreeMap) tree.get("a");
+//		System.out.println(a.keySet());
+//		System.out.println(a.get("id").toString());
+//		
+//		System.out.println(tree.get("q"));
 	}
 	
 	public static String getPos(byte[] a, int start, int size) { 
