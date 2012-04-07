@@ -1,23 +1,17 @@
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.Socket;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.util.Arrays;
 import java.util.Formatter;
 import java.util.TreeMap;
 
 import org.ardverk.coding.BencodingInputStream;
 
 public class TestConnectionPeers {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		// HOST = 192.168.0.11
 		// TRACKER = 95.215.62.5 port = http (80)
 		
@@ -26,14 +20,14 @@ public class TestConnectionPeers {
 		long size = file.length();
 		byte[] buffer = new byte[(int) size]; 
 		
-//		is.read(buffer); 
-//		System.out.println(getPos(buffer, 0, 4));
-//		System.out.println(getPos(buffer, 4, 4));
-//		System.out.println(getPos(buffer, 8, 4));
-//		System.out.println(getPos(buffer, 12, 4));
-//		System.out.println(getPos(buffer, 16, 4));
-//		System.out.println(getPos(buffer, 16, 4));
-//		
+		is.read(buffer); 
+		System.out.println(getPos(buffer, 0, 4));
+		System.out.println(getPos(buffer, 4, 4));
+		System.out.println(getPos(buffer, 8, 4));
+		System.out.println(getPos(buffer, 12, 4));
+		System.out.println(getPos(buffer, 16, 4));
+		System.out.println(getPos(buffer, 16, 4));
+		
 //		for (int i = 20; i < size; i += 6) { 
 //			System.out.println(getIp(buffer, i));
 //			System.out.println(getPort(buffer, i + 4));
@@ -49,16 +43,17 @@ public class TestConnectionPeers {
 		System.out.println(getPos(id, 0, id.length));
 		
 		byte[] q = (byte[]) tree.get("q");
-		System.out.println(getPos(q, 0, q.length));
+		System.out.println(getStr(q));
 		
 		byte[] t = (byte[]) tree.get("t"); 
 		System.out.println(getPos(t, 0, t.length));
 		
 		byte[] v = (byte[]) tree.get("v"); 
-		System.out.println(getPos(v, 0, v.length));
+		System.out.println(v.length);
+		System.out.println(getStr(v));
 		
 		byte[] y = (byte[]) tree.get("y"); 
-		System.out.println(getPos(y, 0, y.length));
+		System.out.println(getStr(y));
 		
 		input = new BencodingInputStream(new FileInputStream("data2"));
 		tree = (TreeMap) input.readMap();
@@ -76,10 +71,10 @@ public class TestConnectionPeers {
 		System.out.println("tree.t :\t\t" + getPos(t, 0, t.length));
 		
 		v = (byte[]) tree.get("v"); 
-		System.out.println("tree.v :\t\t" + getPos(v, 0, v.length));
+		System.out.println("tree.v :\t\t" + new String(v)); 
 		
 		y = (byte[]) tree.get("y"); 
-		System.out.println("tree.y :\t\t" + getPos(y, 0, y.length));
+		System.out.println("tree.y :\t\t" + new String(y));
 		
 		input = new BencodingInputStream(new FileInputStream("data3"));
 		size = new File("data3").length();
@@ -94,6 +89,52 @@ public class TestConnectionPeers {
 		input.read(data);
 		System.out.println(getPos(data, 0, data.length));
 		
+		input = new BencodingInputStream(new FileInputStream("data6"));
+		size = new File("data6").length();
+		data = new byte[(int) size]; 
+		input.skipBytes(94);
+		tree = (TreeMap) input.readMap();
+		System.out.println(tree.keySet());
+		
+		System.out.println(tree.get("complete_ago"));
+		System.out.println(tree.get("e"));
+		System.out.println(getIp((byte[]) tree.get("ipv4"), 0));
+		System.out.println(tree.get("m"));
+		System.out.println(tree.get("metadata_size"));
+		System.out.println(tree.get("p"));
+		System.out.println(tree.get("reqq"));
+		System.out.println(new String((byte[]) tree.get("v")));
+		System.out.println(getIp((byte[]) tree.get("yourip"), 0));
+		
+		
+		input = new BencodingInputStream(new FileInputStream("data7"));
+		input.skip(26);
+		tree = (TreeMap) input.readMap();
+		System.out.println(tree.keySet());
+		System.out.println(tree.get("complete_ago"));
+		System.out.println(tree.get("e"));
+		System.out.println(getIp((byte[]) tree.get("ipv4"), 0));
+		System.out.println(tree.get("m"));
+		System.out.println(tree.get("metadata_size"));
+		System.out.println(tree.get("p"));
+		System.out.println(tree.get("reqq"));
+		System.out.println(new String((byte[])tree.get("v")));
+		System.out.println(getIp((byte[]) tree.get("yourip"), 0));
+		
+		input = new BencodingInputStream(new FileInputStream("data8"));
+		size = new File("data8").length(); 
+		input.skip(225);
+		tree = (TreeMap) input.readMap();
+		System.out.println(tree.keySet());
+		System.out.println("filter\t:\t" + new String((byte[]) (tree.get("filter"))));
+		System.out.println("msg_type\t:\t" + tree.get("msg_type"));
+		System.out.println("num\t\t:\t" + tree.get("num"));
+		
+		input = new BencodingInputStream(new FileInputStream("data9"));
+		size = new File("data9").length() - 20; 
+		input.skip(20);
+		data = new byte[(int) size];
+		System.out.println(calculateHash(data));
 		// try to make connection to this host
 //		int port = 59121;
 //		size = new File("data1").length();
@@ -146,6 +187,10 @@ public class TestConnectionPeers {
 		return format.toString();
 	}
 	
+	public static String getStr(Object a) { 
+		return new String((byte[]) a);
+	}
+	
 	public static String getIp(byte[] a, int start) { 
 		String result = "";
 		for (int i = start; i < start + 4; i++) { 
@@ -159,5 +204,30 @@ public class TestConnectionPeers {
 	public static int getPort(byte[] a, int start) { 
 		String hex = getPos(a, start, 2); 
 		return Integer.parseInt(hex, 16);
+	}
+	
+	public static String calculateHash(byte[] data) throws Exception {
+
+		MessageDigest algorithm = MessageDigest.getInstance("SHA1");
+		BufferedInputStream bis = new BufferedInputStream(new ByteArrayInputStream(data));
+		DigestInputStream dis = new DigestInputStream(bis, algorithm);
+
+		// read the file and update the hash calculation
+		while (dis.read() != -1)
+			;
+
+		// get the hash value as byte array
+		byte[] hash = algorithm.digest();
+
+		System.out.println(Arrays.toString(hash));
+		return byteArray2Hex(hash);
+	}
+	
+	private static String byteArray2Hex(byte[] hash) {
+		Formatter formatter = new Formatter();
+		for (byte b : hash) {
+			formatter.format("%02x ", b);
+		}
+		return formatter.toString();
 	}
 }

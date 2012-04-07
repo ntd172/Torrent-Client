@@ -36,8 +36,22 @@ public class Testing {
 		System.out.println(new String((byte[]) info.get("name")));
 
 		byte[] a = (byte[]) info.get("pieces");
-		System.out.println(Math.ceil(7957957 / 16384.0));
+		byte[] test = new byte[] {13, -15, -122, 52, -11, 70, -115, -2, -10, 116, 38, -67, -76, 43, -45, -118, -104, -95, 52, 28};
 		int length = (int) Math.ceil(7957957 / 16384.0);
+		for (int i = 0; i < length; i++) {
+			boolean check = true;
+			for (int j = 0; j < 20; j++) { 
+				if (a[i * 20 + j] != test[j]) {
+					check = false;
+					break;
+				}
+			}
+			if (check) { 
+				System.out.println("YES");
+				break;
+			}
+		}
+		System.out.println(length);
 		System.out.println(a.length / 20);
 		MessageDigest sha1 = MessageDigest.getInstance("SHA1");
 		for (int i = 0; i < length; i++) {
