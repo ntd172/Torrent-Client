@@ -1,9 +1,11 @@
 package message;
 
+import bittorrent.Constant;
 import util.Util;
 
 public class Choke extends TCPBitTorrentPacket{
 	public Choke() { 
+		setType(Constant.CHOKE);
 	}
 	
 	public byte[] getData() { 

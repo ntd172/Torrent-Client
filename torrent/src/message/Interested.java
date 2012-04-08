@@ -1,9 +1,11 @@
 package message;
 
+import bittorrent.Constant;
 import util.Util;
 
 public class Interested extends TCPBitTorrentPacket {
 	public Interested() { 
+		setType(Constant.INTERESTED);
 	}
 	
 	public byte[] getData() { 

@@ -1,5 +1,7 @@
 package util;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,9 +44,9 @@ public class Util {
 		return ByteBuffer.allocate(n).putShort(a).array();
 	}
 	
-	public static byte[] read(InputStream input, int n) throws IOException { 
+	public static byte[] read(DataInputStream input, int n) throws IOException { 
 		byte[] result = new byte[n]; 
-		input.read(result); 
+		input.readFully(result); 
 		return result;
 	}
 
@@ -67,10 +69,19 @@ public class Util {
 	}
 	
 	public static void printStr(byte[] peerId) { 
-		Formatter formatter = new Formatter(); 
+		String result = "";
 		for (byte a : peerId) { 
-			formatter.format("%c", a);
+			result += (char) a;
 		}
-		System.out.println(formatter.toString());
+		
+		System.out.println(result);
+	}
+	
+	public static String bytesToString(byte[] data) { 
+		return new String(data);
+	}
+	
+	public static int getBit(int n, int a) { 
+		return (n >> a) & 1;
 	}
 }

@@ -1,25 +1,29 @@
 package message;
 
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import util.Util;
+import bittorrent.Constant;
 
 public class Port extends TCPBitTorrentPacket{
 	private int port;
 	
-	public Port(InputStream input, int size) throws IOException { 
-		port = Util.convertBytesToInt(Util.read(input, 4));
+	public Port(DataInputStream input, int size) throws IOException { 
+		byte[] data = Util.read(input, 2);
+		port =  Util.convertBytesToInt(data);
+		setType(Constant.PORT);
 	}
 	
-	public Port(int port) { 
+	public Port(short port) { 
 		this.port = port;
+		setType(Constant.PORT);
 	}
 	
 	public byte[] getData() { 
 		byte[] len = new byte[] { 0, 0, 0, 3}; 
 		byte[] id = new byte[] {9}; 
-		byte[] port = Util.converIntToBytes(this.port, 2);
+		byte[] port = Util.converShorttoBytes((short)this.port, 2);
 		return Util.concatAll(len, id, port);
 	}
 }

@@ -1,19 +1,22 @@
 package message;
 
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import util.Util;
+import bittorrent.Constant;
 
 public class Have extends TCPBitTorrentPacket{
 	private int pieceIndex; 
 	
-	public Have(InputStream input, int size) throws IOException { 
+	public Have(DataInputStream input, int size) throws IOException { 
 		this.pieceIndex = Util.convertBytesToInt(Util.read(input, 4));
+		setType(Constant.HAVE);
 	}
 	
 	public Have(int pieceIndex) { 
 		this.pieceIndex = pieceIndex;
+		setType(Constant.HAVE);
 	}
 	
 	public byte[] getData() { 

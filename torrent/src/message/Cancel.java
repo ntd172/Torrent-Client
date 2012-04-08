@@ -1,16 +1,18 @@
 package message;
 
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import util.Util;
+import bittorrent.Constant;
 
 public class Cancel extends TCPBitTorrentPacket {
 	private int begin, index, length;
-	public Cancel(InputStream input, int size) throws IOException {
+	public Cancel(DataInputStream input, int size) throws IOException {
 		index = Util.convertBytesToInt(Util.read(input, 4));
 		begin = Util.convertBytesToInt(Util.read(input, 4));
 		length = Util.convertBytesToInt(Util.read(input, 4));
+		setType(Constant.CANCEL);
 	}
 	
 	public byte[] getData() { 

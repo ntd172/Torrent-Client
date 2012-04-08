@@ -1,24 +1,39 @@
 package message;
 
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import util.Util;
+import bittorrent.Constant;
 
 
 public class Request extends TCPBitTorrentPacket{
 	private int index, begin, length; 
 	
 	
-	public Request(InputStream input, int size) throws IOException { 
+	public Request(DataInputStream input, int size) throws IOException { 
 		index = Util.convertBytesToInt(Util.read(input, 4));
 		begin = Util.convertBytesToInt(Util.read(input, 4));
 		length = Util.convertBytesToInt(Util.read(input, 4));
+		setType(Constant.REQUEST);
 	}
 	
 	public Request(int index, int begin, int length) {
 		this.index = index; 
 		this.begin = begin; 
+		this.length = length;
+		setType(Constant.REQUEST);
+	}
+	
+	public void setIndex(int index) { 
+		this.index = index;
+	}
+	
+	public void setBegin(int begin) { 
+		this.begin = begin;
+	}
+	
+	public void setLength(int length) { 
 		this.length = length;
 	}
 	

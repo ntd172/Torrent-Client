@@ -1,6 +1,7 @@
 package message;
 
 import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -8,11 +9,9 @@ import util.Util;
 
 public class TCPBitTorrentPacket implements BitTorrentPacket{
 	
-	protected InputStream input; 
-	protected static TCPBitTorrentPacket packet;
+	protected DataInputStream input; 
+	protected TCPBitTorrentPacket packet;
 	protected int type; 
-	private int pieceIndex, index, begin, length, port;
-	private byte[] bitfield, block, message;
 	
 	public TCPBitTorrentPacket() {
 	}
@@ -21,18 +20,19 @@ public class TCPBitTorrentPacket implements BitTorrentPacket{
 		packet = other;
 	}
 	
-	public TCPBitTorrentPacket(InputStream input) {
+	public TCPBitTorrentPacket(DataInputStream input) {
 		this.input = input;
-		matchMessage(); 
+		matchMessage();
 	}
 	
 	public TCPBitTorrentPacket(byte[] input) { 
-		this.input = new ByteArrayInputStream(input);
+		this.input = new DataInputStream(new ByteArrayInputStream(input));
 	}
 	
 	public void matchMessage()  {
 		try {
-			byte[] numBytes = Util.read(input, 4); 
+			byte[] numBytes = new byte[4];
+			input.read(numBytes);
 			int number = Util.convertBytesToInt(numBytes);
 			if (number == 0) { 
 				packet = new KeepAlive();
@@ -72,20 +72,25 @@ public class TCPBitTorrentPacket implements BitTorrentPacket{
 		case 20: 
 			packet = new Extended(input, size); break;
 		default: 
-			throw new IOException("Unknow id"); 
+			System.out.println("id = " + id);
+			System.out.println("size = " + size);
 		}
 	}
 	
 	@Override
 	public byte[] getData() {
 		// TODO Auto-generated method stub
-		return null;
+		return packet.getData();
 	}
 
 	@Override
 	public int getType() {
 		// TODO Auto-generated method stub
-		return 0;
+		return type;
+	}
+	
+	public TCPBitTorrentPacket getInstance() { 
+		return packet;
 	}
 	
 	@Override

@@ -1,8 +1,9 @@
 package message;
 
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
+import util.Util;
 import bittorrent.Constant;
 
 public class HandShake extends TCPBitTorrentPacket{
@@ -13,8 +14,10 @@ public class HandShake extends TCPBitTorrentPacket{
 	private byte[] infoHash = new byte[20]; 
 	private byte[] peerID = new byte[20];  
 	
-	public HandShake(InputStream input) {
-		super(input);
+	public HandShake(DataInputStream input) {
+		this.input = input;
+		matchMessage();
+		setType(Constant.HANDSHAKE);
 	}
 	
 	public HandShake(byte ptrLen, String ptr, byte[] reserved, byte[] infoHash, byte[] peerID) { 
@@ -23,6 +26,7 @@ public class HandShake extends TCPBitTorrentPacket{
 		this.reserved = reserved; 
 		this.infoHash = infoHash; 
 		this.peerID = peerID; 
+		setType(Constant.HANDSHAKE);
 	}
 	
 		
@@ -32,15 +36,20 @@ public class HandShake extends TCPBitTorrentPacket{
 			input.read(temp);
 			ptrLen = temp[0];
 			if (ptrLen != 19) {
-				throw new IOException();
+				System.out.println("Different from default.");
 			}
 
 			// make the default first
 			ptr = new byte[ptrLen];
 			input.read(ptr);
 
+			reserved = new byte[8];
 			input.read(reserved);
+			
+			infoHash = new byte[20];
 			input.read(infoHash);
+			
+			peerID = new byte[20];
 			input.read(peerID);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -49,34 +58,8 @@ public class HandShake extends TCPBitTorrentPacket{
 	}
 	
 	public byte[] getData() { 
-		int size = 1 + ptrLen + 8 + 20 * 2; 
-		int curr = 1;
-		byte[] result = new byte[size]; 
-		
-		result[0] = ptrLen; 
-		for (int i = 0; i < ptrLen; i++) { 
-			result[curr + i] = ptr[i];
-		}
-		curr += ptrLen;
-		
-		for (int i = 0; i < 8; i++) { 
-			result[curr + i] = reserved[i]; 
-		}
-		
-		curr += 8;
-		
-		for (int i = 0; i < 20; i++) { 
-			result[curr + i] = infoHash[i]; 
-		}
-		
-		curr += 20;
-		
-		for (int i = 0; i < 20; i++) { 
-			result[curr + i] = peerID[i]; 
-		}
-		
-		curr += 20;
-		return result;
+		byte[] ptrLen = new byte[] {this.ptrLen};
+		return Util.concatAll(ptrLen, this.ptr, this.reserved, this.infoHash, this.peerID);
 	}
 	
 	public byte[] getInfoHash() { 
