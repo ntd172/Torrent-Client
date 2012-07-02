@@ -11,9 +11,10 @@ public class TorrentData {
 	public TorrentData(byte[] message) throws IOException { 
 		BencodingInputStream encode = new BencodingInputStream(new ByteArrayInputStream(message));
 		tree = (TreeMap) encode.readMap();
+		encode.close();
 	}
 	
-	public TreeMap getMap() { 
+	public TreeMap<String, Object> getMap() { 
 		return tree;
 	}
 }

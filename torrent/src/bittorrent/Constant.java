@@ -14,4 +14,11 @@ public class Constant {
 	public static final int PIECE = 11; 
 	public static final int EXTENDED = 12;
 	public static final int PORT = 13;
+	public static final int BITTORRENT = 14;
+	public static final int UTP = 15;
+	public static final int DEFAULT_BITTORRENT = 19;
+	public static final String DEFAULT_STRING = "BitTorrent protocol";
+	public static final boolean DEBUG = true;
+	public static final long TRUNK_LENGTH = 0x4000;
+	public static final String DIR = "data";
 }

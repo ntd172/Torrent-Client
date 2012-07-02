@@ -1,13 +1,23 @@
 package util;
 
-import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Formatter;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.ardverk.coding.BencodingInputStream;
+import org.ardverk.coding.BencodingOutputStream;
+
+import bittorrent.Constant;
 
 public class Util {
 	public static int convertBytesToInt(byte[] a) { 
@@ -83,5 +93,88 @@ public class Util {
 	
 	public static int getBit(int n, int a) { 
 		return (n >> a) & 1;
+	}
+	
+	public static boolean checksum(int index, byte[] data) { 
+		// TODO: need to check the SHA-1 with the origin file with this data
+		return true;
+	}
+	
+	public static void writeData(File file, byte[] data) { 
+		DataOutputStream  out = null;
+		try {
+			out = new DataOutputStream(new FileOutputStream(file));
+			out.write(data);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally { 
+			try {
+				out.close();
+				if (Constant.DEBUG) { 
+					System.out.println("[WRITE SUCCESSFULLY] " + file);
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void pause() {
+		// TODO Auto-generated method stub
+//		try {
+//			System.in.read();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+	}
+
+	public static void debug(String str) {
+		// TODO Auto-generated method stub
+		System.out.println("[DEBUG] " + str);
+	}
+
+	public static void printDecode(String fileName) throws IOException {
+		// TODO Auto-generated method stub
+		BencodingInputStream stream = new BencodingInputStream(new FileInputStream(fileName));
+		stream.skip(1);
+		TreeMap map = (TreeMap) stream.readMap();
+		System.out.println(map.keySet());
+		
+		System.out.println("[complete_ago] " + map.get("complete_ago"));
+		System.out.println("[e] " + map.get("e"));
+		System.out.println("[ipv4] " + Arrays.toString((byte[])map.get("ipv4")));
+		System.out.println("[m] " + map.get("m"));
+		System.out.println("[metadata_size] " + map.get("metadata_size"));
+		System.out.println("[p] " + map.get("p"));
+		System.out.println("[reqq] " + map.get("reqq"));
+		System.out.println("[v] " + Util.bytesToString((byte[])map.get("v")));
+		System.out.println("[yourip]i " + Arrays.toString((byte[])map.get("yourip")));
+		
+		stream.close();
+	}
+	
+	public static byte[] loadData(String fileName) throws IOException { 
+		DataInputStream input = new DataInputStream(new FileInputStream(fileName));
+		long size = new File(fileName).length();
+		byte[] data = new byte[(int) size];
+		
+		input.readFully(data);
+		input.close();
+		return data;
+	}
+
+	public static byte[] saveData(TreeMap tree) throws IOException {
+		// TODO Auto-generated method stub
+		ByteArrayOutputStream data = new ByteArrayOutputStream();
+		BencodingOutputStream stream = new BencodingOutputStream(data);
+		
+		stream.writeMap((Map) tree);
+		return data.toByteArray();
 	}
 }

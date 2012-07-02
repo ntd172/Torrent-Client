@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
+import message.bittorrent.HandShake;
+import message.bittorrent.TCPBitTorrentPacket;
+
 import org.junit.Test;
 
 import util.Util;
