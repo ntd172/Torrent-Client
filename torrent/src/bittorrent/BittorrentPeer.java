@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -49,6 +48,7 @@ public class BittorrentPeer extends Thread implements Protocol{
 		this.reserved = new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x05};
 		this.fileSize = info.getFileSize();
 
+		// check the status of downloading pieces
 		goingDownload = new boolean[piecesSize][(int) trunkLength];
 	}
 	
@@ -65,6 +65,7 @@ public class BittorrentPeer extends Thread implements Protocol{
 			DataInputStream input = new DataInputStream(socket.getInputStream()); 
 			DataOutputStream output = new DataOutputStream(socket.getOutputStream());
 			
+			// first need to make handshake with peer first
 			handshake(input, output);
 			
 			if (handshakeCheck) { 
@@ -84,12 +85,13 @@ public class BittorrentPeer extends Thread implements Protocol{
 	
 
 	public void handshake(DataInputStream input, DataOutputStream output) throws IOException {
-		// TODO Auto-generated method stub
+		// send handshake to peer
 		HandShake handshake = new HandShake((byte) Constant.DEFAULT_BITTORRENT, Constant.DEFAULT_STRING, reserved, infoHash, peerId);
 		output.write(handshake.getData());
 		
 		handshake = new HandShake(input);
 		// already make connection
+		
 		byte[] reponseInfoHash = handshake.getInfoHash();
 		if (!Arrays.equals(reponseInfoHash, infoHash)) { 
 			if (Constant.DEBUG) { 
@@ -142,9 +144,6 @@ public class BittorrentPeer extends Thread implements Protocol{
 			send.setDone();
 			receive.setDone();
 		}
-		index = 178;
-		begin = 0;
-		length = (int) Math.abs(fileSize - (Constant.TRUNK_LENGTH * (piecesSize-1) * trunkLength));
 		return new Request(index, begin, length);
 	}
 	
@@ -174,6 +173,7 @@ public class BittorrentPeer extends Thread implements Protocol{
 		DataOutputStream out;
 		boolean done = false;
 		BlockingQueue<BitTorrentPacket> queuePacket = new ArrayBlockingQueue<BitTorrentPacket>(CAPACITY);
+		
 		public SendThread(DataOutputStream out) { 
 			this.out = out;
 		}
@@ -252,10 +252,15 @@ public class BittorrentPeer extends Thread implements Protocol{
 			// find other peers who can download invlalid pieces
 			for (int i = 0; i < piecesSize; i++) { 
 				if (!bitmask[i]) { 
+					boolean found = false;
 					for (int j = 0; j < peers.length; j++) {
 						if (peers[j].download(i)) {
+							found = true;
 							break;
 						}
+					}
+					if (found) {
+						Util.debug("Can't download piece " + i + ".");
 					}
 				}
 			}
@@ -292,30 +297,6 @@ public class BittorrentPeer extends Thread implements Protocol{
 				Util.pause();
 			}	
 			
-			
-			// TODO:
-			// send back the Extended
-			// need to construct new Extended and send back
-			
-//			byte[] data = null;
-//			try {
-//				data = Util.loadData("test/input");
-//				p = new Extended(data);
-//				TreeMap<String, Object> tree = p.getMessage();
-//				System.out.println(Arrays.toString(peer.getIp().getAddress()));
-//				tree.put("yourip", peer.getIp().getAddress());
-//				tree.put("v", "ntdo-nkd"); 
-//				System.out.println(tree.keySet());
-//				data = Util.saveData(tree);
-//				
-//				Util.pause();
-//				// change strategy, we don't need to send back extended
-//				// TODO: write back tree to data and send this packet to the client 
-//			} catch (IOException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-			
 			Interested interested = new Interested();
 			send.sendPacket(interested);
 			if (Constant.DEBUG) { 
@@ -335,7 +316,6 @@ public class BittorrentPeer extends Thread implements Protocol{
 			send.sendPacket(request);
 			
 			// print out sending request
-			 
 			if (Constant.DEBUG) { 
 				p.debug();
 				Util.pause();
@@ -356,12 +336,6 @@ public class BittorrentPeer extends Thread implements Protocol{
 				p.debug();
 				Util.pause();
 			}
-			
-//			List<Piece> downloadedPieces = new ArrayList<Piece>();
-//			downloadedPieces.add(p);
-//			for (int i = 0; i < peers.length; i++) { 
-//				peers[i].updatePieces(downloadedPieces);
-//			}
 			
 			Request request = makeRequest();
 			if (Constant.DEBUG) { 

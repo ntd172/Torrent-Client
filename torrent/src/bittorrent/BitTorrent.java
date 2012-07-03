@@ -17,17 +17,17 @@ public class Bittorrent {
 //		Peer testPeer = new Peer(ip, 14435);
 //		ips.add(testPeer);
 		
-		byte[] ip = new byte[] {24, 57, 11, (byte) 128};
-		Peer testPeer = new Peer(ip, 46241);
-		ips.add(testPeer);
+		byte[] ip = new byte[] {75, (byte) 74, (byte) 176, 68};
+		Peer testPeer = new Peer(ip, 60419);
+//		ips.add(testPeer);
 		
-//		ip = new byte[] {24, 102, 15, 12}; 
-//		testPeer = new Peer(ip, 18205);
+		ip = new byte[] {(byte) 76, (byte) 16, (byte) 180, (byte) 31};
+		testPeer = new Peer(ip, 62110);
 //		ips.add(testPeer);
-//		
-//		ip = new byte[] {24, (byte) 142, 43, (byte) 242};
-//		testPeer = new Peer(ip, 56691);
-//		ips.add(testPeer);
+		
+		ip = new byte[] {(byte) 85, (byte) 73, (byte) 49, (byte) 218};
+		testPeer = new Peer(ip, 26017);
+		ips.add(testPeer);
 		
 		
 		// InfoTracker is just only for testing
@@ -45,9 +45,9 @@ public class Bittorrent {
 		}
 		
 		
-//		for (int i = 0; i < ips.size(); i ++) { 
-			peers[0].setPeers(peers);
-			peers[0].start();
-//		}
+		for (int i = 0; i < ips.size(); i ++) { 
+			peers[i].setPeers(peers);
+			peers[i].start();
+		}
 	}
 }

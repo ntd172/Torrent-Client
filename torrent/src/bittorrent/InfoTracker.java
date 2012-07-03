@@ -15,6 +15,7 @@ public class InfoTracker {
 				(byte) 0xb2, (byte) 0xc0, 0x2d, (byte) 0xf1, (byte) 0xf6
 				
 		};
+		
 		peerId = new byte[] {
 				0x2d, 0x55, 0x4d, 0x31, 0x35, 
 				0x31, 0x34, 0x30, 0x4b, 0x68, 
@@ -25,6 +26,34 @@ public class InfoTracker {
 		pieceSize = 179;
 		pieceLength = 64 * 1024; 
 		fileSize = 11730102;
+		
+		infoHash = new byte[] {
+				(byte) 0x5c,
+				(byte) 0xb5,
+				(byte) 0x24,
+				(byte) 0x13,
+				(byte) 0x6e,
+				(byte) 0x98,
+				(byte) 0xd9,
+				(byte) 0x6b,
+				(byte) 0x1a,
+				(byte) 0xa6,
+				(byte) 0x71,
+				(byte) 0xbe,
+				(byte) 0xc8,
+				(byte) 0x85,
+				(byte) 0xdb,
+				(byte) 0x62,
+				(byte) 0xf2,
+				(byte) 0xca,
+				(byte) 0x8a,
+				(byte) 0x7b
+		};
+		
+		pieceSize = 486;
+		pieceLength = 16 * 1024;
+		fileSize = 7957957;
+		
 	}
 	
 	public byte[] getInfoHash() { 
