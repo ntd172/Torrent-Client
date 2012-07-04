@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 
 import message.bittorrent.HandShake;

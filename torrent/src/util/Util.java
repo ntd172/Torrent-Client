@@ -78,6 +78,18 @@ public class Util {
 		}
 		System.out.println(formatter.toString());
 	}
+	
+	public static void printHex(byte[] peerId, int len) {
+		Formatter formatter = new Formatter();
+		int count = 0;
+		for (byte a : peerId) {
+			if (count == len) 
+				break;
+			formatter.format("%02x ", a);
+			count += 1;
+		}
+		System.out.println(formatter.toString());
+	}
 
 	public static void printStr(byte[] peerId) {
 		String result = "";

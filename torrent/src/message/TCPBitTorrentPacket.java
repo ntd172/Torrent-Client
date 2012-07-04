@@ -2,8 +2,8 @@ package message;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import util.Util;
 
@@ -96,5 +96,11 @@ public class TCPBitTorrentPacket implements BitTorrentPacket{
 	@Override
 	public void setType(int type) { 
 		this.type = type;
+	}
+
+	@Override
+	public void write(DataOutputStream out) throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 }

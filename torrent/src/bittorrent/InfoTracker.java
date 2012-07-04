@@ -28,31 +28,30 @@ public class InfoTracker {
 		fileSize = 11730102;
 		
 		infoHash = new byte[] {
-				(byte) 0x5c,
-				(byte) 0xb5,
-				(byte) 0x24,
-				(byte) 0x13,
-				(byte) 0x6e,
-				(byte) 0x98,
-				(byte) 0xd9,
-				(byte) 0x6b,
-				(byte) 0x1a,
-				(byte) 0xa6,
-				(byte) 0x71,
-				(byte) 0xbe,
-				(byte) 0xc8,
-				(byte) 0x85,
-				(byte) 0xdb,
-				(byte) 0x62,
-				(byte) 0xf2,
-				(byte) 0xca,
-				(byte) 0x8a,
-				(byte) 0x7b
-		};
-		
-		pieceSize = 486;
-		pieceLength = 16 * 1024;
-		fileSize = 7957957;
+				(byte)0x4B,
+				(byte)0x5F,
+				(byte)0x6A,
+				(byte)0x3E,
+				(byte)0x50,
+				(byte)0x49,
+				(byte)0x49,
+				(byte) 0xAF,
+				(byte) 0xE1,
+				(byte) 0x07,
+				(byte) 0x58,
+				(byte) 0x0A,
+				(byte) 0x67,
+				(byte) 0x84,
+				(byte) 0x43,
+				(byte) 0x7E,
+				(byte) 0xD0,
+				(byte) 0x9B,
+				(byte) 0xE5,
+				(byte)0x2A
+		};		
+		pieceSize = 1369;
+		pieceLength = 512 * 1024;
+		fileSize = 717533184;
 		
 	}
 	

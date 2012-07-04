@@ -2,13 +2,12 @@ package bittorrent;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class Bittorrent {
+public class BitTorrent {
 	public static final int MAX = 10;
-	public static final int PIECES = 179;
+	public static final int PIECES = 1369;
 	public static void main(String[] args) throws UnknownHostException {
 		List<Peer> ips = new ArrayList<Peer>();
 		
@@ -17,16 +16,13 @@ public class Bittorrent {
 //		Peer testPeer = new Peer(ip, 14435);
 //		ips.add(testPeer);
 		
-		byte[] ip = new byte[] {75, (byte) 74, (byte) 176, 68};
-		Peer testPeer = new Peer(ip, 60419);
-//		ips.add(testPeer);
+		byte[] ip = new byte[] {(byte) 109, (byte) 206, (byte) 36, (byte) 53};
+		int port = 55555;
 		
-		ip = new byte[] {(byte) 76, (byte) 16, (byte) 180, (byte) 31};
-		testPeer = new Peer(ip, 62110);
-//		ips.add(testPeer);
+		ip = new byte[] {(byte) 91, (byte) 189, (byte) 90, (byte) 143}; 
+		port = 6939;
 		
-		ip = new byte[] {(byte) 85, (byte) 73, (byte) 49, (byte) 218};
-		testPeer = new Peer(ip, 26017);
+		Peer testPeer = new Peer(ip, port);
 		ips.add(testPeer);
 		
 		

@@ -22,9 +22,8 @@ public class TestCase {
 		
 		byte[] addr = new byte[] {74, 125, (byte) 224, 49};
 		int port = 80;
-		BitTorrent torrent = new BitTorrent(addr, port);
-		assertFalse(torrent.getInputStream() == null);
-		
+//		BitTorrent torrent = new BitTorrent(addr, port);
+//		assertFalse(torrent.getInputStream() == null);
 	}
 
 }

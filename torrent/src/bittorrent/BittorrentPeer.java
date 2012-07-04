@@ -47,7 +47,11 @@ public class BittorrentPeer extends Thread implements Protocol{
 		this.trunkLength = info.getPieceLength() / Constant.TRUNK_LENGTH;
 		this.reserved = new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x05};
 		this.fileSize = info.getFileSize();
-
+		
+		// TODO: sometimes there are no BitField packet in order to figure the valid packet
+//		bitmask = new boolean[piecesSize];
+//		Arrays.fill(bitmask, true);
+		
 		// check the status of downloading pieces
 		goingDownload = new boolean[piecesSize][(int) trunkLength];
 	}
@@ -95,7 +99,9 @@ public class BittorrentPeer extends Thread implements Protocol{
 		byte[] reponseInfoHash = handshake.getInfoHash();
 		if (!Arrays.equals(reponseInfoHash, infoHash)) { 
 			if (Constant.DEBUG) { 
-			System.out.println("[Bittorrent HandShake Differnt InfoHash] " + peer.getIp().getHostAddress() + ":" + peer.getPort());
+				System.out.println("[Bittorrent HandShake Different InfoHash] " + peer.getIp().getHostAddress() + ":" + peer.getPort());
+				Util.printHex(reponseInfoHash);
+				Util.printHex(infoHash);
 			}
 		} else { 
 			if (Constant.DEBUG) { 
@@ -119,7 +125,7 @@ public class BittorrentPeer extends Thread implements Protocol{
 		int begin = 0;
 		int length = (int) Constant.TRUNK_LENGTH;
 		for (int i = 0; i < piecesSize; i++) { 
-			if (bitmask[i]) { 
+			if (bitmask == null || (bitmask != null && bitmask[i])) { 
 				for (int j = 0; j < trunkLength; j++) { 
 					if (goingDownload[i][j]) { 
 						goingDownload[i][j] = false;
@@ -220,24 +226,27 @@ public class BittorrentPeer extends Thread implements Protocol{
 		public void run() { 
 			while (!done) { 
 				TCPBitTorrentPacket packet = new TCPBitTorrentPacket(input).getInstance();
-				switch (packet.getType()) { 
-				case Constant.BITFIELD: 
-					handleBitField(packet);
-					break;
-				case Constant.PORT: 
-					handlePort(packet);
-					break;
-				case Constant.EXTENDED:
-					handleExtended(packet);
-					break;
-				case Constant.UNCHOKE: 
-					handleUnChoke(packet);
-					break;
-				case Constant.PIECE: 
-					handlePiece(packet);
-					break;
-				default:
-					// just do nothing
+				if (packet == null) {
+				} else {
+					switch (packet.getType()) { 
+					case Constant.BITFIELD: 
+						handleBitField(packet);
+						break;
+					case Constant.PORT: 
+						handlePort(packet);
+						break;
+					case Constant.EXTENDED:
+						handleExtended(packet);
+						break;
+					case Constant.UNCHOKE: 
+						handleUnChoke(packet);
+						break;
+					case Constant.PIECE: 
+						handlePiece(packet);
+						break;
+					default:
+						// just do nothing
+					}
 				}
 			}
 		}

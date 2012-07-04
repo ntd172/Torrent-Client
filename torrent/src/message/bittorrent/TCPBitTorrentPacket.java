@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import message.BitTorrentPacket;
+import message.ContinuousData;
 
 import util.Util;
 
@@ -75,8 +76,11 @@ public class TCPBitTorrentPacket implements BitTorrentPacket{
 		case 20: 
 			packet = new Extended(input, size); break;
 		default: 
+			// TODO: need to handle if this is an continuous data
+			// ASSUMPTION: if not original packet, it has to be continuous packet
 			System.out.println("id = " + id);
 			System.out.println("size = " + size);
+			Util.read(input, size - 1);
 		}
 	}
 	

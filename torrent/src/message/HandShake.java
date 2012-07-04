@@ -2,6 +2,7 @@ package message;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import util.Util;
 import bittorrent.Constant;
@@ -14,8 +15,8 @@ public class HandShake extends TCPBitTorrentPacket{
 	private byte[] infoHash = new byte[20]; 
 	private byte[] peerID = new byte[20];  
 	
-	public HandShake(DataInputStream input) {
-		this.input = input;
+	public HandShake(InputStream input) {
+		this.input = (DataInputStream) input;
 		matchMessage();
 		setType(Constant.HANDSHAKE);
 	}
