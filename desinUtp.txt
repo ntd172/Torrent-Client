@@ -1,0 +1,45 @@
+===============
+class UTPSocket
+===============
+Public 
+	+ UTPSocket(InetAddress address, int port)
+	+ UTPSocket(String host, int port)
+
+Methods:
+	+ Inputstrema getInputStream()
+	+ OuputStream getOutputStream()
+	+ close() 
+	
+====================
+class UTPInputStream implements InputStream 
+==================== 
+Public
+	+ UTPInputStream(DatagramSocket socket, DatagramPacket packet)
+Methods 
+	+ int available()
+	+ void close()
+	+ void mark()	
+	+ boolean markSupported()
+	+ int read()
+	+ int read(byte[] b)
+	+ void reset()
+	+ long skip(long n) 
+	
+=====================	
+class UTPOutputStream implements OutputStream 
+=====================
+
+Public 
+	+ UTPOutputStream(DatagramSocket socket, DatagramPacket packet)
+	
+Methods
+	+ void close()
+	+ void flush()
+	+ void write(byte[] b) 
+ 	+ void write(byte[] b, int off, int len)
+	+ void write(int b) 
+
+	
+
+	
+	
