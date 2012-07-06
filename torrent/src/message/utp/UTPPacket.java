@@ -4,17 +4,17 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 
 public class UTPPacket {
-	int ver;
-	int type; 
-	int extension; 
-	int connection_id;
-	int connection_id_recv;
-	int connection_id_send;
-	int timestamp_microseconds;
-	int timestamp_difference_microseconds;
-	int wnd_size;
-	int seq_nr;
-	int ack_nr;
+	public int ver;
+	public int type; 
+	public int extension; 
+	public int connection_id;
+	public int connection_id_recv;
+	public int connection_id_send;
+	public int timestamp_microseconds;
+	public int timestamp_difference_microseconds;
+	public int wnd_size;
+	public int seq_nr;
+	public int ack_nr;
 	
 	private InetAddress inet;
 	private int port;
@@ -29,7 +29,14 @@ public class UTPPacket {
 	}
 	
 	public DatagramPacket getDatagramPacket() {
+		//TODO: need to return the 
 		DatagramPacket result = null;
 		return result;
+	}
+	
+	public void add(int data) {
+	}
+	
+	public void add(byte[] data, int off, int len) {
 	}
 }

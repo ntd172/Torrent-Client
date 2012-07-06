@@ -25,8 +25,13 @@ public class UTPSocket {
 	}
 	
 	public UTPSocket(DatagramSocket socket, UTPPacket handshake) {
+		input = new UTPInputStream(socket, handshake);
+		output = new UTPOutputStream(socket, handshake);
 	}
 	
+	/*
+	 * Try go make connection with other end
+	 */
 	public void connect() throws IOException {
 		// make the datagramsocket here
 		socket = new DatagramSocket();
@@ -45,10 +50,11 @@ public class UTPSocket {
 		byte[] buffer = new byte[ConstantState.MAX_BUFFER]; 
 		DatagramPacket receive = new DatagramPacket(buffer, buffer.length);
 		socket.receive(receive);
-		handshake = new UTPPacket(receive);
+		UTPPacket other = new UTPPacket(receive);
+		handshake.type = ConstantState.ST_CONNECTED;
+		handshake.ack_nr = other.seq_nr;
 		
-		input = new UTPInputStream(socket, handshake);
-		output = new UTPOutputStream(socket, handshake);
+		new UTPSocket(socket, handshake);
 	}
 	
 	public InputStream getIntputStream() {
