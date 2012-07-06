@@ -1,6 +1,7 @@
 package message.utp;
 
 import java.io.IOException;
+
 import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -11,6 +12,9 @@ public class UTPOutputStream extends OutputStream {
 	
 	public UTPOutputStream(DatagramSocket socket, DatagramPacket packet) {
 		
+	}
+	
+	public UTPOutputStream(DatagramSocket socket, UTPPacket packet) {
 	}
 	
 	public void close() {
