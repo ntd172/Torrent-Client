@@ -5,15 +5,11 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import org.junit.Test;
-
-import other.UTPSocket.UTPInputStream;
 
 public class TestUTP {
 
-	protected static final int PORT = 0;
-	@Test
-	public void test() {
+	protected static final int PORT = 1234;
+	public static void main(String[] args) {
 		// Try to set up a connection with local host
 		// First going to create server socket
 		new Thread(new Runnable() {
@@ -30,8 +26,7 @@ public class TestUTP {
 					UTPOutputStream output = (UTPOutputStream) socket
 							.getOutputStream();
 
-					int len;
-					len = input.available();
+					int len = input.available();
 					byte[] readData = new byte[len];
 					
 					input.read(readData, 0, len);
@@ -60,12 +55,14 @@ public class TestUTP {
 					int port = PORT;
 					socket = new UTPSocket(inet, port);
 					socket.connect();
+					System.out.println("====== connected ======");
 					UTPInputStream input = (UTPInputStream) socket.getIntputStream();
 					UTPOutputStream output = (UTPOutputStream) socket.getOutputStream();
 					
 					String data = "Hello World";
-					output.write(data.getBytes());
+					System.out.println(output);
 					System.out.println("[Client] Send: " + data);
+					output.write(data.getBytes());
 					
 					int len = input.available();
 					byte[] readData = new byte[len];
@@ -87,5 +84,4 @@ public class TestUTP {
 			}
 		}).start();
 	}
-
 }

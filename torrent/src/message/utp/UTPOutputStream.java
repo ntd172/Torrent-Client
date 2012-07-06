@@ -35,6 +35,10 @@ public class UTPOutputStream extends OutputStream {
 		
 		socket.send(uTPpacket.getDatagramPacket());
 	}
+
+	public void write(byte[] data) throws IOException {
+		write(data, 0, data.length);
+	}
 	
 	@Override
 	public void write(int data) throws IOException {

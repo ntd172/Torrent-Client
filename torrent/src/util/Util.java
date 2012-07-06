@@ -32,17 +32,30 @@ public class Util {
 
 		return total;
 	}
-
+	
+	/*
+	 * Convert the byte[] to integer
+	 */
+	public static int convertBytesToInt(byte[] a, int off, int len) {
+		byte[] temp = new byte[len];
+		for (int i = 0; i < len; i++)
+			temp[i] = a[off + i];
+		return convertBytesToInt(temp);
+	}
+	
 	public static byte[] concatAll(byte[] first, byte[]... rest) {
 		int totalLength = first.length;
 		for (byte[] array : rest) {
-			totalLength += array.length;
+			if (array != null)
+				totalLength += array.length;
 		}
 		byte[] result = Arrays.copyOf(first, totalLength);
 		int offset = first.length;
 		for (byte[] array : rest) {
-			System.arraycopy(array, 0, result, offset, array.length);
-			offset += array.length;
+			if (array != null) {
+				System.arraycopy(array, 0, result, offset, array.length);
+				offset += array.length;
+			}
 		}
 		return result;
 	}

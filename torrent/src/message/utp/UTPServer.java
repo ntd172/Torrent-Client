@@ -21,14 +21,12 @@ public class UTPServer {
 	
 	public UTPSocket accept() throws IOException {
 		server.receive(packet);
-		int port = packet.getPort();
-		InetAddress inet = packet.getAddress();
-		
+		System.out.println("Accept");
 		
 		// TODO:
 		// make the handshake here
 		UTPPacket other = new UTPPacket(packet);
-		UTPPacket handshake = new UTPPacket();
+		UTPPacket handshake = new UTPPacket(packet.getAddress(), packet.getPort());
 		handshake.connection_id_recv = other.connection_id + 1;
 		handshake.connection_id_send = other.connection_id;
 		handshake.seq_nr = new Random().nextInt();
@@ -47,7 +45,6 @@ public class UTPServer {
 	}
 	
 	public void close() {
-		
 	}
 	
 	public InetAddress getInetAddress() {
