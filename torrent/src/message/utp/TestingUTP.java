@@ -40,6 +40,7 @@ public class TestingUTP {
 					DatagramPacket packet = new DatagramPacket(str.getBytes(), str.getBytes().length, InetAddress.getLocalHost(), 1235);
 					System.out.println("[Client] Send: " + str);
 					socket.send(packet);
+					
 				} catch (SocketException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

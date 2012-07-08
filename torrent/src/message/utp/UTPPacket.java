@@ -2,6 +2,7 @@ package message.utp;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import util.Util;
 
@@ -18,16 +19,41 @@ public class UTPPacket {
 	public int seq_nr;
 	public int ack_nr;
 	public byte[] extra = new byte[ConstantState.MAX_BUFFER];
-	private int size = 0;
+	public int size = 0;
 	
-	private InetAddress inet;
-	private int port;
+	public InetAddress inet;
+	public int port;
 	public UTPPacket() {
 	}
 	
 	public UTPPacket(InetAddress inet, int port) {
 		this.inet = inet;
 		this.port = port;
+	}
+	
+	public UTPPacket(UTPPacket other) {
+		this.ver = other.ver;
+		this.type = other.type;
+		this.extension = other.extension;
+		this.connection_id = other.connection_id;
+		this.connection_id_recv = other.connection_id_recv;
+		this.connection_id_send = other.connection_id_send;
+		this.timestamp_difference_microseconds = other.timestamp_difference_microseconds;
+		this.timestamp_microseconds = other.timestamp_microseconds;
+		this.wnd_size = other.wnd_size;
+		this.seq_nr = other.seq_nr;
+		this.ack_nr = other.ack_nr;
+		this.size = other.size;
+		for (int i = 0; i < extra.length; i++) 
+			this.extra[i] = other.extra[i];
+		
+		try {
+			this.inet = InetAddress.getByAddress(other.inet.getAddress());
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.port = other.port;
 	}
 	public UTPPacket(DatagramPacket packet) {
 		inet = packet.getAddress();
@@ -73,10 +99,14 @@ public class UTPPacket {
 		byte[] wnd_sizeData = Util.converIntToBytes(wnd_size, 4);
 		byte[] seq_nrData = Util.converShorttoBytes((short) seq_nr, 2);
 		byte[] ack_nrData = Util.converShorttoBytes((short) ack_nr, 2);
+		byte[] extraData = new byte[size];
+		for (int i = 0; i < size; i++)
+			extraData[i] = extra[i];
 		
 		byte[] data = Util.concatAll(firstData, extensionData, connection_idData, 
 				timestamp_microsecondsData, timestamp_differenceData, 
-				wnd_sizeData, seq_nrData, ack_nrData, extra);
+				wnd_sizeData, seq_nrData, ack_nrData, extraData);
+		System.out.println(data.length);
 		return new DatagramPacket(data, data.length, inet, port);
 	}
 	
@@ -91,5 +121,9 @@ public class UTPPacket {
 			extra[size + i] = data[off + i];
 		
 		size += len;
+	}
+	
+	public void add(byte[] data) {
+		add(data, 0, data.length);
 	}
 }
